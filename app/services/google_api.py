@@ -24,9 +24,12 @@ SPREADSHEET_BODY = {
 
 
 async def spreadsheets_create(wrapper_services: Aiogoogle) -> str:
+    now = datetime.now().strftime(FORMAT)
+    json_body = SPREADSHEET_BODY
+    json_body['properties']['title'] = f'Отчет от {now}'
     service = await wrapper_services.discover('sheets', 'v4')
     response = await wrapper_services.as_service_account(
-        service.spreadsheets.create(json=SPREADSHEET_BODY)
+        service.spreadsheets.create(json=json_body)
     )
     spreadsheet_id = response['spreadsheetId']
     return spreadsheet_id
